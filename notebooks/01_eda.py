@@ -161,6 +161,123 @@ def correlations(df):
     plt.savefig("results/eda_correlation.png", dpi=150, bbox_inches='tight')
     plt.close()
 
+def top_discriminative_words(df, top_n: int = 15):
+    #using TF-IDF and chi-squared to find the words most linked to each class which proves language patterns in real and fake post
+    from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
+    from sklearn.feature_selection import chi2
+
+    print("\n Top Discriminative Words ")
+    cols = detect_columns(df)
+    text_cols = cols['text']
+    if not text_cols:
+        return
+
+    #merges text columns into one string per row
+    merged = df[text_cols].fillna('').agg(' '.join, axis=1).str.lower()
+
+    vec = TfidfVectorizer(max_features=3000, stop_words=list(ENGLISH_STOP_WORDS),
+                          ngram_range=(1, 2), min_df=5)
+    X = vec.fit_transform(merged)
+    y = df['fraudulent'].values
+    feature_names = vec.get_feature_names_out()
+
+    #Chi-squared score for each feature
+    chi2_scores, _ = chi2(X, y)
+
+    #mean TF-IDF per class will tell which class each word leans toward
+    real_mean = X[y == 0].mean(axis=0).A1
+    fake_mean = X[y == 1].mean(axis=0).A1
+
+    #top words by chi2 score after splits by which class they favor
+    top_idx = np.argsort(chi2_scores)[::-1][:top_n * 2]
+    fake_words = [(feature_names[i], chi2_scores[i])
+                  for i in top_idx if fake_mean[i] > real_mean[i]][:top_n]
+    real_words = [(feature_names[i], chi2_scores[i])
+                  for i in top_idx if real_mean[i] >= fake_mean[i]][:top_n]
+
+    print(f"\n  Top {len(fake_words)} words/phrases more common in fake postings:")
+    for w, s in fake_words:
+        print(f"    {w:30s} chi2={s:.2f}")
+
+    print(f"\n  Top {len(real_words)} words/phrases more common in real postings:")
+    for w, s in real_words:
+        print(f"    {w:30s} chi2={s:.2f}")
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, max(4, top_n * 0.3)))
+    if fake_words:
+        names, scores = zip(*fake_words)
+        axes[0].barh(names, scores, color='#F44336')
+        axes[0].set_title('More common in fake')
+        axes[0].invert_yaxis()
+    if real_words:
+        names, scores = zip(*real_words)
+        axes[1].barh(names, scores, color='#4CAF50')
+        axes[1].set_title('More common in real')
+        axes[1].invert_yaxis()
+    fig.suptitle('Most Discriminative Words (chi-squared)')
+    plt.tight_layout()
+    plt.savefig("results/eda_top_words.png", dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f"\n  Saved: results/eda_top_words.png")
+
+def top_discriminative_words(df, top_n: int = 15):
+    #Use TF-IDF and chi-squared in finding words liked most to each class which shows us which pattern of language is used in real or fake job post
+    from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
+    from sklearn.feature_selection import chi2
+
+    print("\n Top Discriminative Words ")
+    cols = detect_columns(df)
+    text_cols = cols['text']
+    if not text_cols:
+        return
+
+    #merge text columns into one string per row
+    merged = df[text_cols].fillna('').agg(' '.join, axis=1).str.lower()
+
+    vec = TfidfVectorizer(max_features=3000, stop_words=list(ENGLISH_STOP_WORDS),
+                          ngram_range=(1, 2), min_df=5)
+    X = vec.fit_transform(merged)
+    y = df['fraudulent'].values
+    feature_names = vec.get_feature_names_out()
+
+    #Chi-squared score for each feature
+    chi2_scores, _ = chi2(X, y)
+
+    #mean TF-IDF per class indicates which words leans towards which class
+    real_mean = X[y == 0].mean(axis=0).A1
+    fake_mean = X[y == 1].mean(axis=0).A1
+
+    #finds out top words from chi2 score and split it according the class
+    top_idx = np.argsort(chi2_scores)[::-1][:top_n * 2]
+    fake_words = [(feature_names[i], chi2_scores[i])
+                  for i in top_idx if fake_mean[i] > real_mean[i]][:top_n]
+    real_words = [(feature_names[i], chi2_scores[i])
+                  for i in top_idx if real_mean[i] >= fake_mean[i]][:top_n]
+
+    print(f"\n  Top {len(fake_words)} words/phrases more common in fake postings:")
+    for w, s in fake_words:
+        print(f"    {w:30s} chi2={s:.2f}")
+
+    print(f"\n  Top {len(real_words)} words/phrases more common in real postings:")
+    for w, s in real_words:
+        print(f"    {w:30s} chi2={s:.2f}")
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, max(4, top_n * 0.3)))
+    if fake_words:
+        names, scores = zip(*fake_words)
+        axes[0].barh(names, scores, color='#F44336')
+        axes[0].set_title('More common in fake')
+        axes[0].invert_yaxis()
+    if real_words:
+        names, scores = zip(*real_words)
+        axes[1].barh(names, scores, color='#4CAF50')
+        axes[1].set_title('More common in real')
+        axes[1].invert_yaxis()
+    fig.suptitle('Most Discriminative Words (chi-squared)')
+    plt.tight_layout()
+    plt.savefig("results/eda_top_words.png", dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f"\n  Saved: results/eda_top_words.png")
 
 def auto_summary(df):
     #All results here are calculated from the data, not hardcoded
@@ -205,5 +322,6 @@ if __name__ == "__main__":
     text_length_comparison(df)
     feature_differences(df)
     correlations(df)
+    top_discriminative_words(df) 
     auto_summary(df)
     print("\nPlots saved to results/")
