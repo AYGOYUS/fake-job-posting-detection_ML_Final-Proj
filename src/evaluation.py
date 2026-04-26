@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.sparse import hstack, csr_matrix
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, roc_curve, auc
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
@@ -92,34 +92,56 @@ def plot_feature_importance(importances: dict, path: str):
     ax.set_title('Top Feature Importances of Metadata Model')
     _save_fig(fig, path)
 
+def plot_roc_curves(curves: dict, path: str):
+    fig, ax = plt.subplots(figsize=(7, 6))
+    for name, (fpr, tpr, auc_score) in curves.items():
+        ax.plot(fpr, tpr, label=f'{name} (AUC = {auc_score:.3f})', linewidth=2)
+    ax.plot([0, 1], [0, 1], 'k--', linewidth=1, label='Random')
+    ax.set_xlabel('False Positive Rate')
+    ax.set_ylabel('True Positive Rate')
+    ax.set_title('ROC Curves')
+    ax.legend(loc='lower right'); ax.grid(alpha=0.3)
+    _save_fig(fig, path)
 
 def confusion_for_all_models(text_X, meta_X, y):
-    #each model is trained and its confusion matrix is plotted
+    #each model is trained and its confusion matrix and roc curve is plotted
     idx_train, idx_test = train_test_split(
         np.arange(len(y)), test_size=0.2, random_state=42, stratify=y)
     y_train, y_test = y[idx_train], y[idx_test]
+    roc_curves = {}
 
-    #Text model
+    #text model
     txt = LogisticRegression(max_iter=1000, class_weight='balanced',
                              random_state=42, solver='liblinear')
     txt.fit(text_X[idx_train], y_train)
     plot_confusion(y_test, txt.predict(text_X[idx_test]),
                    "Text-Only Model", "results/cm_text_model.png")
+    txt_proba = txt.predict_proba(text_X[idx_test])[:, 1]
+    fpr, tpr, _ = roc_curve(y_test, txt_proba)
+    roc_curves['Text Only'] = (fpr, tpr, auc(fpr, tpr))
 
-    #Metadata model
+    #metadata model
     meta = RandomForestClassifier(n_estimators=100, max_depth=15,
                                   class_weight='balanced', random_state=42)
     meta.fit(meta_X[idx_train], y_train)
     plot_confusion(y_test, meta.predict(meta_X[idx_test]),
                    "Metadata-Only Model", "results/cm_metadata_model.png")
+    meta_proba = meta.predict_proba(meta_X[idx_test])[:, 1]
+    fpr, tpr, _ = roc_curve(y_test, meta_proba)
+    roc_curves['Metadata Only'] = (fpr, tpr, auc(fpr, tpr))
 
-    #Combined model
+    #combined model
     combined_X = hstack([text_X, csr_matrix(meta_X)])
     comb = LogisticRegression(max_iter=1000, class_weight='balanced',
                               random_state=42, solver='liblinear')
     comb.fit(combined_X.tocsr()[idx_train], y_train)
     plot_confusion(y_test, comb.predict(combined_X.tocsr()[idx_test]),
                    "Combined Model", "results/cm_combined_model.png")
+    comb_proba = comb.predict_proba(combined_X.tocsr()[idx_test])[:, 1]
+    fpr, tpr, _ = roc_curve(y_test, comb_proba)
+    roc_curves['Combined'] = (fpr, tpr, auc(fpr, tpr))
+
+    plot_roc_curves(roc_curves, "results/roc_curves.png")
 
 
 def run_evaluation(text_X, meta_X, y):
