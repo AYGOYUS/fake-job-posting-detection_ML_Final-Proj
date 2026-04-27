@@ -83,10 +83,6 @@ The accuracy is not sufficient because fraudulent postings are not normally as n
 - Seaborn
 - Scikit-learn
 
-Optional:
-- XGBoost
-- NLTK / spaCy
-
 ## Repository Structure
 
 ```text
