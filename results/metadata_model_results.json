@@ -1,0 +1,80 @@
+{
+  "Decision Tree": {
+    "accuracy": {
+      "mean": 0.921,
+      "std": 0.0096
+    },
+    "precision": {
+      "mean": 0.3632,
+      "std": 0.0294
+    },
+    "recall": {
+      "mean": 0.8152,
+      "std": 0.0311
+    },
+    "f1": {
+      "mean": 0.5016,
+      "std": 0.0289
+    },
+    "roc_auc": {
+      "mean": 0.8887,
+      "std": 0.0118
+    }
+  },
+  "Random Forest": {
+    "accuracy": {
+      "mean": 0.9742,
+      "std": 0.0016
+    },
+    "precision": {
+      "mean": 0.7478,
+      "std": 0.0152
+    },
+    "recall": {
+      "mean": 0.7044,
+      "std": 0.0378
+    },
+    "f1": {
+      "mean": 0.7249,
+      "std": 0.0226
+    },
+    "roc_auc": {
+      "mean": 0.9726,
+      "std": 0.0069
+    }
+  },
+  "Gradient Boosting": {
+    "accuracy": {
+      "mean": 0.9776,
+      "std": 0.0016
+    },
+    "precision": {
+      "mean": 0.9098,
+      "std": 0.038
+    },
+    "recall": {
+      "mean": 0.5982,
+      "std": 0.0356
+    },
+    "f1": {
+      "mean": 0.7205,
+      "std": 0.0227
+    },
+    "roc_auc": {
+      "mean": 0.9717,
+      "std": 0.0043
+    }
+  },
+  "feature_importance": {
+    "has_company_profile": 0.1508,
+    "location_enc": 0.1451,
+    "has_company_logo": 0.1356,
+    "title_enc": 0.0824,
+    "industry_enc": 0.0714,
+    "department_enc": 0.0695,
+    "function_enc": 0.067,
+    "required_education_enc": 0.06,
+    "required_experience_enc": 0.0355,
+    "salary_range_enc": 0.0339
+  }
+}

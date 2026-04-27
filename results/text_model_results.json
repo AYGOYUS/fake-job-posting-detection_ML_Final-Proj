@@ -1,0 +1,68 @@
+{
+  "Logistic Regression": {
+    "accuracy": {
+      "mean": 0.9487,
+      "std": 0.0038
+    },
+    "precision": {
+      "mean": 0.4851,
+      "std": 0.019
+    },
+    "recall": {
+      "mean": 0.8869,
+      "std": 0.0334
+    },
+    "f1": {
+      "mean": 0.6263,
+      "std": 0.0088
+    },
+    "roc_auc": {
+      "mean": 0.9775,
+      "std": 0.0045
+    }
+  },
+  "Naive Bayes": {
+    "accuracy": {
+      "mean": 0.9701,
+      "std": 0.0015
+    },
+    "precision": {
+      "mean": 0.9529,
+      "std": 0.0222
+    },
+    "recall": {
+      "mean": 0.4019,
+      "std": 0.0207
+    },
+    "f1": {
+      "mean": 0.5652,
+      "std": 0.0243
+    },
+    "roc_auc": {
+      "mean": 0.9484,
+      "std": 0.0091
+    }
+  },
+  "Linear SVM": {
+    "accuracy": {
+      "mean": 0.9659,
+      "std": 0.0033
+    },
+    "precision": {
+      "mean": 0.6065,
+      "std": 0.0321
+    },
+    "recall": {
+      "mean": 0.8592,
+      "std": 0.032
+    },
+    "f1": {
+      "mean": 0.7098,
+      "std": 0.0157
+    },
+    "roc_auc": {
+      "mean": 0.9774,
+      "std": 0.0065
+    }
+  }
+}

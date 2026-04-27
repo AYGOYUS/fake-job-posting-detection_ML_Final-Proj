@@ -1,0 +1,136 @@
+{
+  "Combined LR": {
+    "accuracy": {
+      "mean": 0.9415,
+      "std": 0.0025
+    },
+    "precision": {
+      "mean": 0.4503,
+      "std": 0.0107
+    },
+    "recall": {
+      "mean": 0.9354,
+      "std": 0.0122
+    },
+    "f1": {
+      "mean": 0.6078,
+      "std": 0.0102
+    },
+    "roc_auc": {
+      "mean": 0.9842,
+      "std": 0.0015
+    }
+  },
+  "Combined RF": {
+    "accuracy": {
+      "mean": 0.9636,
+      "std": 0.0019
+    },
+    "precision": {
+      "mean": 0.5941,
+      "std": 0.0111
+    },
+    "recall": {
+      "mean": 0.7819,
+      "std": 0.0492
+    },
+    "f1": {
+      "mean": 0.6747,
+      "std": 0.0248
+    },
+    "roc_auc": {
+      "mean": 0.9808,
+      "std": 0.0042
+    }
+  },
+  "Combined SVM": {
+    "accuracy": {
+      "mean": 0.9669,
+      "std": 0.0019
+    },
+    "precision": {
+      "mean": 0.6075,
+      "std": 0.0156
+    },
+    "recall": {
+      "mean": 0.8973,
+      "std": 0.0296
+    },
+    "f1": {
+      "mean": 0.7241,
+      "std": 0.0135
+    },
+    "roc_auc": {
+      "mean": 0.986,
+      "std": 0.0035
+    }
+  },
+  "ablation_study": {
+    "text_only": {
+      "accuracy": {
+        "mean": 0.9487,
+        "std": 0.0038
+      },
+      "precision": {
+        "mean": 0.4851,
+        "std": 0.019
+      },
+      "recall": {
+        "mean": 0.8869,
+        "std": 0.0334
+      },
+      "f1": {
+        "mean": 0.6263,
+        "std": 0.0088
+      },
+      "roc_auc": {
+        "mean": 0.9775,
+        "std": 0.0045
+      }
+    },
+    "metadata_only": {
+      "accuracy": {
+        "mean": 0.8046,
+        "std": 0.0071
+      },
+      "precision": {
+        "mean": 0.1689,
+        "std": 0.0052
+      },
+      "recall": {
+        "mean": 0.7725,
+        "std": 0.013
+      },
+      "f1": {
+        "mean": 0.2771,
+        "std": 0.0072
+      },
+      "roc_auc": {
+        "mean": 0.8631,
+        "std": 0.0107
+      }
+    },
+    "combined": {
+      "accuracy": {
+        "mean": 0.9415,
+        "std": 0.0025
+      },
+      "precision": {
+        "mean": 0.4503,
+        "std": 0.0107
+      },
+      "recall": {
+        "mean": 0.9354,
+        "std": 0.0122
+      },
+      "f1": {
+        "mean": 0.6078,
+        "std": 0.0102
+      },
+      "roc_auc": {
+        "mean": 0.9842,
+        "std": 0.0015
+      }
+    }
+  }
+}
